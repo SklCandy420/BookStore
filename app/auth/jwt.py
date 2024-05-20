@@ -3,15 +3,7 @@ from typing import Optional
 from jose import JWTError, jwt
 from pydantic import BaseModel
 from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: Optional[str] = None
+from app import models, schemas
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -31,7 +23,7 @@ def verify_token(token: str, credentials_exception):
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = schemas.TokenData(username=username)
     except JWTError:
         raise credentials_exception
     return token_data

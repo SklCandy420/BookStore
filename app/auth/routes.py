@@ -59,3 +59,15 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
     if user is None:
         raise credentials_exception
     return user
+
+@router.post("/create/user/", response_model=schemas.User)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    db_user = db.query(models.User).filter(models.User.username == user.username).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Username already registered")
+    new_user = models.User(username=user.username)
+    new_user.set_password(user.password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
