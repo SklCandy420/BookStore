@@ -11,7 +11,7 @@
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/SklCandy420/bookstore.git
+    git clone https://github.com/SklCandy420/Bookstore.git
     cd bookstore
     ```
 
